@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
+using System.Transactions;
+using System.Xml.Linq;
 
 class FlashCard  //Flashcard class: Holds individual flashcards, each with an ID, question, and answer
 {
@@ -11,14 +14,38 @@ class FlashCard  //Flashcard class: Holds individual flashcards, each with an ID
 
 /* Represents the user playing the game, with properties like name and high score
    User class: Tracks the player’s name and high score. High scores are updated after each game if the score exceeds the previous high*/
-class User
+
+public class User
 {
-    public string Name { get; set; }  // User name, used for the greeting with players name part
+    public string name { get; set; }
+    public string password { get; set; }
+    public string Username1 { get; set; }  // User name, used for the greeting with players name part
+
+
+    public User(string Name1, string Password, string username1)
+    {
+        name = Name1;
+        password = Password;
+        Username1 = username1;
+    }
+
+
+    public virtual void Display()
+    {
+        Console.WriteLine($"Username: ");
+    }
+}
+
+
+
+class Username:User
+{
+    
     public int HighScore { get; private set; }  //User highest score, updated if beaten previous score
 
-    public User(string name) //constructor initializes\calls on the user's name
+    public Username(string name, string password, string username1) : base (name, password, username1)  //constructor initializes\calls on the user's name
     {
-        Name = name;
+        Username1 = name;
         HighScore = 0;  // zero high score at start
         LoadHighScore();
     }
@@ -34,7 +61,7 @@ class User
 
     private void SaveHighScore()  //stores highest score
     {
-        File.WriteAllText("user.txt", $"{Name},{HighScore}");
+        File.WriteAllText("user.txt", $"{Username1},{HighScore}");
     }
 
     private void LoadHighScore()  //loads highest score
@@ -42,13 +69,16 @@ class User
         if (File.Exists("user.txt"))
         {
             string[] data = File.ReadAllText("user.txt").Split(',');
-            if (data[0] == Name && int.TryParse(data[1], out int score))
+            if (data[0] == Username1 && int.TryParse(data[1], out int score))
             {
                 HighScore = score;
             }
         }
     }
 }
+
+
+
 
 class FlashCardDeck  //Manage the collection of flashcards, including CRUD operations, CRUD also begins here hell)
 {
@@ -150,18 +180,22 @@ class FlashCardDeck  //Manage the collection of flashcards, including CRUD opera
 class GameManager  //Manages flashcard game, including gameplay logic and score tracking
 {
     private FlashCardDeck flashCardDeck;  //Reference to the flashcard deck
-    private User user;  //Reference to the user playing the game
+    private Username user;  //Reference to the user playing the game
 
-    public GameManager(User user, FlashCardDeck flashCardDeck)  //Initializes game with a user and a flashcard deck
+    public GameManager(FlashCardDeck flashCardDeck)  //Initializes game with a user and a flashcard deck
     {
-        this.user = user;
+        
         this.flashCardDeck = flashCardDeck;
+    }
+
+    public GameManager(string username, FlashCardDeck deck)
+    {
     }
 
     public void StartGame()  // Starts game, iterating through flashcards and checking answers
     {
         Console.Clear();
-        Console.WriteLine($"\nWelcome {user.Name}! Starting the game with {flashCardDeck.GetAllFlashCards().Count} flashcards.\n");
+        Console.WriteLine($"\nWelcome {user.Username1}! Starting the game with {flashCardDeck.GetAllFlashCards().Count} flashcards.\n");
 
         int correctAnswers = 0;  //Counts the number of correct answers
         foreach (var card in flashCardDeck.GetAllFlashCards())
@@ -185,18 +219,105 @@ class GameManager  //Manages flashcard game, including gameplay logic and score 
     }
 }
 
+
+
 class Program  // The main program class that coordinates user interaction and the menu system
 {
+
+    static List <User> users = new List <User> ();
+
+
     static void Main(string[] args)
     {
-        Console.Write("Enter your name: ");
-        User user = new User(Console.ReadLine());  // Create a new user with the entered name
+        Mainmenu();
+        
+    }
+
+   
+
+    static void PauseForMenu() // Pauses program to allow the user to view results
+    {
+        Console.WriteLine("\nPress Enter to return to main menu...");
+        Console.ReadLine();
+        Console.Clear(); // Clears the words after pressing any button, before showing the menu again
+    }
+
+
+    static void Mainmenu()
+    {
+        while (true)
+        {
+            Console.Clear();
+            Console.WriteLine("FLASHLEARN");
+            Console.WriteLine("1. Login");
+            Console.WriteLine("2. Register");
+            Console.WriteLine("3. Exit");
+
+            try
+            {
+                if (int.TryParse(Console.ReadLine(), out int choice))
+                {
+                    switch (choice)
+                    {
+                        case 1:
+                            Login();
+                            break;
+
+                        case 2:
+                            Register();
+                            break;
+
+                        case 3:
+                            Environment.Exit(0);
+                            break;
+
+                        default:
+                            Console.WriteLine("Invalid choice. Please try again.");
+                            break;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. Please enter a number.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+
+            Console.WriteLine("\n\t\t\t\t                     Press Enter to continue...");
+            Console.ReadLine();
+        }
+
+    }
+
+    static void HomePage(User user) {
+        
+        
         FlashCardDeck deck = new FlashCardDeck();  // Create anew empty flashcard deck
+        
+
+        Console.Clear();
+        Console.WriteLine("////////////////////////////////////");
+        Console.WriteLine($"* Welcome to FlashLearn *");
+        Console.WriteLine("////////////////////////////////////\n");
+
+
+        Console.WriteLine("=============================");
+        Console.WriteLine("|| 1. Add a FlashCard      ||");
+        Console.WriteLine("|| 2. View all FlashCards  ||");
+        Console.WriteLine("|| 3. Update a FlashCard   ||");
+        Console.WriteLine("|| 4. Delete a FlashCard   ||");
+        Console.WriteLine("|| 5. Start the Game       ||");
+        Console.WriteLine("|| 6. Exit                 ||");
+        Console.WriteLine("=============================");
+        Console.Write("  >Choose an option: ");
 
         bool keepRunning = true;
         while (keepRunning)
         {
-            ShowMenu(user.Name);
+            
             string choice = Console.ReadLine();
 
             switch (choice)
@@ -252,7 +373,7 @@ class Program  // The main program class that coordinates user interaction and t
                     }
                     else
                     {
-                        GameManager gameManager = new GameManager(user, deck); //else start the game if flashcards found
+                        GameManager gameManager = new GameManager(deck); //else start the game if flashcards found
                         gameManager.StartGame();
                     }
                     PauseForMenu();
@@ -261,6 +382,7 @@ class Program  // The main program class that coordinates user interaction and t
                 case "6":  //Exit game
                     keepRunning = false;
                     Console.WriteLine("Thank you for playing. Goodbye!");
+
                     break;
 
                 default:
@@ -271,29 +393,104 @@ class Program  // The main program class that coordinates user interaction and t
         }
     }
 
-    static void ShowMenu(string userName) // Displays main menu with the welcome for user in menu
+    static void Register()
     {
         Console.Clear();
-        Console.WriteLine("////////////////////////////////////");
-        Console.WriteLine($"* Welcome to FlashLearn, {userName}! *");
-        Console.WriteLine("////////////////////////////////////\n");
+        Console.WriteLine("SIGN UP NOW!");
+        Console.WriteLine("Enter username: ");
+        string name = Console.ReadLine()!;
+        Console.WriteLine("Enter password: ");
+        string password = ReadPassword();
+        Console.WriteLine("\nEnter Account Username: ");
+        string user = Console.ReadLine()!;
 
-        
-        Console.WriteLine("=============================");
-        Console.WriteLine("|| 1. Add a FlashCard      ||");
-        Console.WriteLine("|| 2. View all FlashCards  ||");
-        Console.WriteLine("|| 3. Update a FlashCard   ||");
-        Console.WriteLine("|| 4. Delete a FlashCard   ||");
-        Console.WriteLine("|| 5. Start the Game       ||");
-        Console.WriteLine("|| 6. Exit                 ||");
-        Console.WriteLine("=============================");
-        Console.Write("  >Choose an option: ");
+        User user1 = new User (name, password, user);
+
+        if (users.Any(u => u.Username1 == name)) // Scans through the list if the same username exists
+        {
+            Console.Clear();
+            Console.WriteLine("Username already exists. Please try again.");
+        }
+        else
+        {
+            Console.WriteLine("Account Created Successfully");
+            users.Add(user1);
+            SaveUserInfo(user1);
+        }
     }
 
-    static void PauseForMenu() // Pauses program to allow the user to view results
+    static void Login()
     {
-        Console.WriteLine("\nPress Enter to return to main menu...");
-        Console.ReadLine();
-        Console.Clear(); // Clears the words after pressing any button, before showing the menu again
+
+        LoadUserInfo();
+
+        Console.Clear();
+        Console.WriteLine("Welcome To Flash! Please Log in!");
+        Console.WriteLine("Enter username: ");
+        string name2 = Console.ReadLine();
+        Console.WriteLine("Enter password: ");
+        string pass2 = ReadPassword();
+
+        User user = users.FirstOrDefault(u => u.name == name2 && u.password == pass2);
+
+        if (user != null) 
+        {
+            HomePage(user);
+        }
+        else
+        {
+            Console.WriteLine("Invalid Username or Password. Please Try Again!");
+
+        }
+
+
+       
+
+       
+    }
+
+
+    static void SaveUserInfo(User user)
+    {
+        string userData = $"{user.name}:{user.password}:{user.Username1}\n";
+        File.AppendAllText("user.txt", userData);
+    }
+
+    static void LoadUserInfo()
+    {
+        if (File.Exists("user_data.txt"))
+        {
+            string[] lines = File.ReadAllLines("user_data.txt");
+
+            foreach (string line in lines)
+            {
+                string[] parts = line.Split(':');
+                if (parts.Length == 4) // Ensure there are four parts: username, password, name, email
+                {
+                    users.Add(new User(parts[0], parts[1], parts[2]));
+                }
+            }
+        }
+    }
+    public static string ReadPassword()
+    {
+        StringBuilder password = new StringBuilder();
+        ConsoleKeyInfo keyInfo;
+
+        do
+        {
+            keyInfo = Console.ReadKey(intercept: true);
+            if (keyInfo.Key != ConsoleKey.Backspace && keyInfo.Key != ConsoleKey.Enter)
+            {
+                password.Append(keyInfo.KeyChar);
+                Console.Write("*");
+            }
+            else if (keyInfo.Key == ConsoleKey.Backspace && password.Length > 0)
+            {
+                password.Remove(password.Length - 1, 1);
+                Console.Write("\b \b");
+            }
+        } while (keyInfo.Key != ConsoleKey.Enter);
+        return password.ToString();
     }
 }
