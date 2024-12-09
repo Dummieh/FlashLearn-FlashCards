@@ -278,6 +278,7 @@ class Program  // The main program class that coordinates user interaction and t
         Console.WriteLine($"* Welcome to FlashLearn, {userName}! *");
         Console.WriteLine("////////////////////////////////////\n");
 
+        Console.WriteLine("Egg");
         Console.WriteLine("=============================");
         Console.WriteLine("|| 1. Add a FlashCard      ||");
         Console.WriteLine("|| 2. View all FlashCards  ||");
