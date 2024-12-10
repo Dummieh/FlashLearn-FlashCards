@@ -23,11 +23,6 @@ class Person
 
 
 
-
-
-
-
-
 /* Represents the user playing the game, with properties like name and high score
    User class: Tracks the player’s name and high score. High scores are updated after each game if the score exceeds the previous high*/
 class User : Person
@@ -177,30 +172,77 @@ class GameManager  //Manages flashcard game, including gameplay logic and score 
         this.flashCardDeck = flashCardDeck;
     }
 
-    public void StartGame()  // Starts game, iterating through flashcards and checking answers
+    public void StartGame() // Starts game, iterating through flashcards and checking answers
     {
-        Console.Clear();
-        Console.WriteLine($"\nWelcome {user.Name}! Starting the game with {flashCardDeck.GetAllFlashCards().Count} flashcards.\n");
-
-        int correctAnswers = 0;  //Counts the number of correct answers
-        foreach (var card in flashCardDeck.GetAllFlashCards())
+        try
         {
-            Console.WriteLine(card.Question);
-            string userAnswer = Console.ReadLine();
+            Console.Clear();
 
-            if (userAnswer.Equals(card.Answer, StringComparison.OrdinalIgnoreCase))  //Check if the user answer is correct(case doesnt matter)
+            // Check if the user or flashCardDeck is null
+            if (user == null)
             {
-                Console.WriteLine("Correct!\n");
-                correctAnswers++;
+                Console.WriteLine("Error: User not found. Please ensure you are logged in.");
+                return;
             }
-            else
+
+            if (flashCardDeck == null || flashCardDeck.GetAllFlashCards().Count == 0)
             {
-                Console.WriteLine($"Wrong! The correct answer is {card.Answer}.\n");
+                Console.WriteLine("Error: No flashcards available. Please add some flashcards to the deck.");
+                return;
+            }
+
+            Console.WriteLine($"\nWelcome {user.Name}! Starting the game with {flashCardDeck.GetAllFlashCards().Count} flashcards.\n");
+
+            int correctAnswers = 0; // Counts the number of correct answers
+
+            foreach (var card in flashCardDeck.GetAllFlashCards())
+            {
+                try
+                {
+                    Console.WriteLine(card.Question);
+
+                    string userAnswer = Console.ReadLine();
+
+                    // Validate input
+                    if (string.IsNullOrWhiteSpace(userAnswer))
+                    {
+                        Console.WriteLine("Error: Answer cannot be empty. Please try again.\n");
+                        continue;
+                    }
+
+                    // Check if the user answer is correct (case doesn't matter)
+                    if (userAnswer.Equals(card.Answer, StringComparison.OrdinalIgnoreCase))
+                    {
+                        Console.WriteLine("Correct!\n");
+                        correctAnswers++;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Wrong! The correct answer is {card.Answer}.\n");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"An error occurred while processing the flashcard: {ex.Message}");
+                }
+            }
+
+            Console.WriteLine($"Game over! Your score: {correctAnswers}/{flashCardDeck.GetAllFlashCards().Count}.\n");
+
+            // Update high score, ensuring user is valid
+            try
+            {
+                user.UpdateHighScore(correctAnswers);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while updating the high score: {ex.Message}");
             }
         }
-
-        Console.WriteLine($"Game over! Your score: {correctAnswers}/{flashCardDeck.GetAllFlashCards().Count}.\n");
-        user.UpdateHighScore(correctAnswers);  // Updates high score
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+        }
     }
 }
 

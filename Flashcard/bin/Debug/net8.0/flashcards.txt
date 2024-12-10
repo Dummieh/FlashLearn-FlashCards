@@ -5,3 +5,4 @@
 5|What is the known rules of aviation?|A bee should 
 6|What is a rule of aviation?|A bee should not be able to fly
 7|yup|nope
+8|How many?|yes
