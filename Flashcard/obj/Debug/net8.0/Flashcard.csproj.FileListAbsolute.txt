@@ -1,0 +1,15 @@
+C:\Users\Daryl\Downloads\Clone-Copy\FlashLearn-FlashCards\Flashcard\bin\Debug\net8.0\Flashcard.exe
+C:\Users\Daryl\Downloads\Clone-Copy\FlashLearn-FlashCards\Flashcard\bin\Debug\net8.0\Flashcard.deps.json
+C:\Users\Daryl\Downloads\Clone-Copy\FlashLearn-FlashCards\Flashcard\bin\Debug\net8.0\Flashcard.runtimeconfig.json
+C:\Users\Daryl\Downloads\Clone-Copy\FlashLearn-FlashCards\Flashcard\bin\Debug\net8.0\Flashcard.dll
+C:\Users\Daryl\Downloads\Clone-Copy\FlashLearn-FlashCards\Flashcard\bin\Debug\net8.0\Flashcard.pdb
+C:\Users\Daryl\Downloads\Clone-Copy\FlashLearn-FlashCards\Flashcard\obj\Debug\net8.0\Flashcard.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Daryl\Downloads\Clone-Copy\FlashLearn-FlashCards\Flashcard\obj\Debug\net8.0\Flashcard.AssemblyInfoInputs.cache
+C:\Users\Daryl\Downloads\Clone-Copy\FlashLearn-FlashCards\Flashcard\obj\Debug\net8.0\Flashcard.AssemblyInfo.cs
+C:\Users\Daryl\Downloads\Clone-Copy\FlashLearn-FlashCards\Flashcard\obj\Debug\net8.0\Flashcard.csproj.CoreCompileInputs.cache
+C:\Users\Daryl\Downloads\Clone-Copy\FlashLearn-FlashCards\Flashcard\obj\Debug\net8.0\Flashcard.sourcelink.json
+C:\Users\Daryl\Downloads\Clone-Copy\FlashLearn-FlashCards\Flashcard\obj\Debug\net8.0\Flashcard.dll
+C:\Users\Daryl\Downloads\Clone-Copy\FlashLearn-FlashCards\Flashcard\obj\Debug\net8.0\refint\Flashcard.dll
+C:\Users\Daryl\Downloads\Clone-Copy\FlashLearn-FlashCards\Flashcard\obj\Debug\net8.0\Flashcard.pdb
+C:\Users\Daryl\Downloads\Clone-Copy\FlashLearn-FlashCards\Flashcard\obj\Debug\net8.0\Flashcard.genruntimeconfig.cache
+C:\Users\Daryl\Downloads\Clone-Copy\FlashLearn-FlashCards\Flashcard\obj\Debug\net8.0\ref\Flashcard.dll

@@ -9,16 +9,35 @@ class FlashCard  //Flashcard class: Holds individual flashcards, each with an ID
     public string Answer { get; set; }  //The flashcards answer text or input something
 }
 
-/* Represents the user playing the game, with properties like name and high score
-   User class: Tracks the player’s name and high score. High scores are updated after each game if the score exceeds the previous high*/
-class User
-{
-    public string Name { get; set; }  // User name, used for the greeting with players name part
-    public int HighScore { get; private set; }  //User highest score, updated if beaten previous score
 
-    public User(string name) //constructor initializes\calls on the user's name
+class Person
+{
+    public string Name { get; set; }
+
+    public Person(string name)
     {
         Name = name;
+    }
+
+}
+
+
+
+
+
+
+
+
+/* Represents the user playing the game, with properties like name and high score
+   User class: Tracks the player’s name and high score. High scores are updated after each game if the score exceeds the previous high*/
+class User : Person
+{
+    // User name, used for the greeting with players name part
+    public int HighScore { get; private set; }  //User highest score, updated if beaten previous score
+
+    public User(string name) : base (name)//constructor initializes\calls on the user's name
+    {
+        
         HighScore = 0;  // zero high score at start
         LoadHighScore();
     }
@@ -189,7 +208,11 @@ class Program  // The main program class that coordinates user interaction and t
 {
     static void Main(string[] args)
     {
-        Console.Write("Enter your name: ");
+
+        Console.WriteLine("////////////////////////////////////");
+        Console.WriteLine($"* Welcome to FlashLearn! *");
+        Console.WriteLine("////////////////////////////////////\n");
+        Console.Write("Please Enter your name to get started: ");
         User user = new User(Console.ReadLine());  // Create a new user with the entered name
         FlashCardDeck deck = new FlashCardDeck();  // Create anew empty flashcard deck
 
@@ -275,10 +298,9 @@ class Program  // The main program class that coordinates user interaction and t
     {
         Console.Clear();
         Console.WriteLine("////////////////////////////////////");
-        Console.WriteLine($"* Welcome to FlashLearn, {userName}! *");
+        Console.WriteLine($"* Welcome {userName}! *");
         Console.WriteLine("////////////////////////////////////\n");
 
-        Console.WriteLine("Egg");
         Console.WriteLine("=============================");
         Console.WriteLine("|| 1. Add a FlashCard      ||");
         Console.WriteLine("|| 2. View all FlashCards  ||");

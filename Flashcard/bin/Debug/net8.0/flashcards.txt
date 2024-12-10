@@ -1,0 +1,7 @@
+1|How are you doing today?|Im doing fine
+2|How to survive a 50ft fall?|You dont
+3|Can you count to 10?|Yes
+4|Do you wanna build a snowman?|No
+5|What is the known rules of aviation?|A bee should 
+6|What is a rule of aviation?|A bee should not be able to fly
+7|yup|nope
